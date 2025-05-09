@@ -1,10 +1,14 @@
 services:
     rabbitmq:
-        image: rabbitmq:3.13.7-alpine
+        image: rabbitmq:3.13.7-management
+        # image: rabbitmq:3.13.7-alpine
         container_name: rabbitssl
+        environment:
+           - TZ=Asia/Taipei 
         ports:
             - 5671:5671
             - 5672:5672
+            - 15672:15672
         volumes:
             - "./ssl/ca_certificate.pem:/etc/ssl/rabbit/ca_certificate.pem"
             - "./ssl/server_certificate.pem:/etc/ssl/rabbit/server_certificate.pem"
