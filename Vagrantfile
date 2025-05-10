@@ -30,13 +30,12 @@ Vagrant.configure("2") do |config|
   # Forward ssh agent to easily ssh into the different machines
   config.ssh.forward_agent = true
   
-  config.vm.box = "bento/ubuntu-24.04"
-  # config.vm.box = "bento/rockylinux-8"
-  # config.vm.box = "generic/rhel8"
-  # config.vm.box = "roboxes/rhel8"  
+  # config.vm.box = "bento/ubuntu-24.04"
+  config.vm.box = "bento/rockylinux-8"
   config.vm.hostname = "rabittsslvm.local.dev"
 
   # config.vm.network :private_network, ip: "20.100.198.110"   # vmware
+  # config.vm.provider "vmware_desktop" do |vb|
   config.vm.network :private_network, ip: "10.100.198.110"   # virtualbox
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
@@ -44,7 +43,8 @@ Vagrant.configure("2") do |config|
     vb.memory = "4096"
     vb.cpus = "2"
   end
-  config.vm.provision :docker
+  # config.vm.provision :docker
+  config.vm.provision "shell", path: "scripts/rockylinux.sh" 
   config.vm.provision :hostmanager
   config.hostmanager.aliases = %w(beans.rock dukes.rock)
   if Vagrant.has_plugin?("vagrant-cachier")

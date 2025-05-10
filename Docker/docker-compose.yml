@@ -1,16 +1,18 @@
 services:
-    rabbitmq:
-        image: rabbitmq:3.13.7-management
+    rabbitmq: 
+        image: rabbitmq:3.13.7-management 
         # image: rabbitmq:3.13.7-alpine
         container_name: rabbitssl
+        restart: always
         environment:
-           - TZ=Asia/Taipei 
+           - TZ=Asia/Taipei
         ports:
             - 5671:5671
             - 5672:5672
             - 15672:15672
-        volumes:
-            - "./ssl/ca_certificate.pem:/etc/ssl/rabbit/ca_certificate.pem"
-            - "./ssl/server_certificate.pem:/etc/ssl/rabbit/server_certificate.pem"
-            - "./ssl/server_key.pem:/etc/ssl/rabbit/server_key.pem"
-            - "./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf"
+        # If you use Vagrant , you need to copy the below files to the Vagrant non-shared folder    
+        volumes:   #In Linux , chmod 644 config/* ssl/* 
+            - ./ssl/ca_certificate.pem:/etc/ssl/rabbit/ca_certificate.pem
+            - ./ssl/server_certificate.pem:/etc/ssl/rabbit/server_certificate.pem
+            - ./ssl/server_key.pem:/etc/ssl/rabbit/server_key.pem
+            - ./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro # In Linux , chmod 644 rabbitmq.conf
