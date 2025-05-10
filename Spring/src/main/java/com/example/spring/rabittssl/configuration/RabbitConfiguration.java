@@ -25,6 +25,7 @@ import org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -78,24 +79,46 @@ public class RabbitConfiguration {
      * @return Rabbit connection factory for rabbitmq access.
      * @throws IOException If wrong parameters are used for connection.
      */
+//    @Bean
+//    public RabbitConnectionFactoryBean connectionFactoryBean() throws IOException {
+//        RabbitConnectionFactoryBean connectionFactoryBean = new RabbitConnectionFactoryBean();
+//        connectionFactoryBean.setHost(Objects.requireNonNull(env.getProperty("rabbit.host")));
+//        connectionFactoryBean.setPort(Integer.parseInt(Objects.requireNonNull(env.getProperty("rabbit.port"))));
+//        connectionFactoryBean.setUsername(Objects.requireNonNull(env.getProperty("rabbit.username")));
+//        connectionFactoryBean.setPassword(Objects.requireNonNull(env.getProperty("rabbit.password")));
+//
+//        // SSL-Configuration if set
+//        if(env.getProperty("rabbit.ssl") != null) {
+//            connectionFactoryBean.setUseSSL(true);
+//            connectionFactoryBean.setSslAlgorithm(Objects.requireNonNull(env.getProperty("rabbit.ssl")));
+//
+//            // This information should be stored safely !!!
+//            connectionFactoryBean.setKeyStore(Objects.requireNonNull(env.getProperty("rabbit.keystore.name")));
+//            connectionFactoryBean.setKeyStorePassphrase(Objects.requireNonNull(env.getProperty("rabbit.keystore.password")));
+//            connectionFactoryBean.setTrustStore(Objects.requireNonNull(env.getProperty("rabbit.truststore")));
+//            connectionFactoryBean.setTrustStorePassphrase(Objects.requireNonNull(env.getProperty("rabbit.truststore.password")));
+//        }
+//
+//        return connectionFactoryBean;
+//    }
     @Bean
-    public RabbitConnectionFactoryBean connectionFactoryBean() throws IOException {
+    public RabbitConnectionFactoryBean connectionFactoryBean(RabbitProperties properties) throws IOException {
         RabbitConnectionFactoryBean connectionFactoryBean = new RabbitConnectionFactoryBean();
-        connectionFactoryBean.setHost(Objects.requireNonNull(env.getProperty("rabbit.host")));
-        connectionFactoryBean.setPort(Integer.parseInt(Objects.requireNonNull(env.getProperty("rabbit.port"))));
-        connectionFactoryBean.setUsername(Objects.requireNonNull(env.getProperty("rabbit.username")));
-        connectionFactoryBean.setPassword(Objects.requireNonNull(env.getProperty("rabbit.password")));
-
+        connectionFactoryBean.setHost(Objects.requireNonNull(properties.getHost()));
+        
+        connectionFactoryBean.setPort(Objects.requireNonNull(properties.getPort()));
+        connectionFactoryBean.setUsername(Objects.requireNonNull(properties.getUsername()));
+        connectionFactoryBean.setPassword(Objects.requireNonNull(properties.getPassword()));
+        
         // SSL-Configuration if set
-        if(env.getProperty("rabbit.ssl") != null) {
-            connectionFactoryBean.setUseSSL(true);
-            connectionFactoryBean.setSslAlgorithm(Objects.requireNonNull(env.getProperty("rabbit.ssl")));
+        if(properties.getSsl().getEnabled()) {
+            connectionFactoryBean.setUseSSL(true); 
 
             // This information should be stored safely !!!
-            connectionFactoryBean.setKeyStore(Objects.requireNonNull(env.getProperty("rabbit.keystore.name")));
-            connectionFactoryBean.setKeyStorePassphrase(Objects.requireNonNull(env.getProperty("rabbit.keystore.password")));
-            connectionFactoryBean.setTrustStore(Objects.requireNonNull(env.getProperty("rabbit.truststore")));
-            connectionFactoryBean.setTrustStorePassphrase(Objects.requireNonNull(env.getProperty("rabbit.truststore.password")));
+            connectionFactoryBean.setKeyStore(Objects.requireNonNull(properties.getSsl().getKeyStore()));
+            connectionFactoryBean.setKeyStorePassphrase(Objects.requireNonNull(properties.getSsl().getKeyStorePassword()));
+            connectionFactoryBean.setTrustStore(Objects.requireNonNull(properties.getSsl().getTrustStore()));
+            connectionFactoryBean.setTrustStorePassphrase(Objects.requireNonNull(properties.getSsl().getTrustStorePassword()));
         }
 
         return connectionFactoryBean;

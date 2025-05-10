@@ -147,3 +147,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+# Vagrant
+
+## Vagrant up by vmware_desktop
+```
+vagrant up --provider=vmware_desktop
+```
+
+## Vagrant up by virtualbox
+```
+vagrant up --provider=virtualbox
+```

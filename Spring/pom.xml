@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>com.example.spring</groupId>
-	<artifactId>main</artifactId>
+	<artifactId>rabittssl-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-rabbitmq-ssl</name>
 	<packaging>jar</packaging> 
